@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('lightings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("airplane_id")->constrained();
+            $table->string("airplane_name");
+            $table->string("airport_code");
             $table->decimal("adema", 10, 2)->nullable()->default(0);
             $table->decimal("asecna", 10, 2)->nullable()->default(0);
             $table->decimal("ravinala", 10, 2)->nullable()->default(0);
