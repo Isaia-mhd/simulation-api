@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string("airport_code");
             $table->decimal("adema", 10, 2)->nullable()->default(0);
             $table->decimal("asecna", 10, 2)->nullable()->default(0);
-            $table->decimal("ravinala", 10, 2)->nullable()->default(0);
             $table->decimal("total_lighting", 10, 2)->nullable()->default(0);
             $table->timestamps();
         });
