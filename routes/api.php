@@ -9,3 +9,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get("/airports", [\App\Http\Controllers\ExcelController::class, 'getFuelToAirport']);
 Route::apiResource("airplanes", \App\Http\Controllers\AirplaneController::class);
+Route::apiResource("flights", \App\Http\Controllers\FlightController::class);
