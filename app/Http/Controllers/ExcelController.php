@@ -6,7 +6,9 @@ use App\Imports\ApproachImport;
 use App\Imports\FuelPriceImport;
 use App\Imports\LandingImport;
 use App\Imports\LightingImport;
+use App\Imports\TicketImport;
 use App\Imports\TimeflightImport;
+use App\Models\Approach;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -44,7 +46,13 @@ class ExcelController extends Controller
             Excel::import(new LightingImport(), storage_path("app/private/atterissagebalisage.xlsx"));
             Excel::import(new ApproachImport(), storage_path("app/private/atterissagebalisage.xlsx"));
             Excel::import(new TimeflightImport(), storage_path("app/private/timeflights.xlsx"));
+            Excel::import(new TicketImport(), storage_path("app/private/ticketprice.xlsx"));
 
+            Approach::where("airplane_name", "ATR72-500")
+                ->where("airport_code", "WMN")->update([
+                    "adema" => 36693.6,
+                    "total_approach" => 36693.6
+                ]);
 
             return response()->json([
                 "message" => "Data imported successfully."
