@@ -42,7 +42,7 @@ class ExcelController extends Controller
             Excel::import(new FuelPriceImport(), storage_path("app/private/airports.xls"));
             Excel::import(new LandingImport(), storage_path("app/private/atterissagebalisage.xlsx"));
             Excel::import(new LightingImport(), storage_path("app/private/atterissagebalisage.xlsx"));
-//            Excel::import(new ApproachImport(), storage_path("app/private/atterissagebalisage.xlsx"));
+            Excel::import(new ApproachImport(), storage_path("app/private/atterissagebalisage.xlsx"));
             Excel::import(new TimeflightImport(), storage_path("app/private/timeflights.xlsx"));
 
 

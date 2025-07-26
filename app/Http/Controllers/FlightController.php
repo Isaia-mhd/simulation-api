@@ -20,10 +20,10 @@ class FlightController extends Controller
     {
         $flights = Flight::with(["airplane", "arrivalAirport", "departureAirport"])
             ->orderBy("departure_date", "desc")
-            ->get();
+            ->get()->load(["airplane", "arrivalAirport", "departureAirport"]);
 
         return response()->json([
-            "data" => FlightResource::collection($flights),
+            "flight" => FlightResource::collection($flights),
         ], 200);
     }
 
@@ -82,6 +82,8 @@ class FlightController extends Controller
                 )
             );
 
+            $flight->load(['airplane', 'departureAirport', 'arrivalAirport']);
+
             return response()->json([
                 "message" => "Flight created",
                 "flight" => new AirplaneResource($flight),
@@ -96,20 +98,62 @@ class FlightController extends Controller
 
 
 
-    public function show(Flight $flight)
+    public function show($flight)
     {
-        //
+        $flight = Flight::find($flight);
+
+        if(!$flight)
+        {
+            return response()->json([
+                "success" => false,
+                "message" => "Flight not found"
+            ], 404);
+        }
+
+        return response()->json([
+            "flight" => new AirplaneResource($flight)
+        ], 200);
     }
 
 
-    public function update(Request $request, Flight $flight)
+    public function update(StoreFlightRequest $request, $flight)
     {
-        //
+
+        $flight = Flight::find($flight);
+
+        if(!$flight)
+        {
+            return response()->json([
+                "success" => false,
+                "message" => "Flight not found"
+            ], 404);
+        }
+
+        $flight->update($request->validated());
+
+        return response()->json([
+            "message" => "Flight updated successfully",
+            "flight" => new AirplaneResource($flight),
+        ], 200);
     }
 
 
-    public function destroy(Flight $flight)
+    public function destroy($flight)
     {
-        //
+        $flight = Flight::find($flight);
+        if(!$flight)
+        {
+            return response()->json([
+                "success" => false,
+                "message" => "Flight not found"
+            ], 404);
+        }
+
+        $flight->delete();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Flight deleted successfully",
+        ], 200);
     }
 }
