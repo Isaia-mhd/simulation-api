@@ -16,14 +16,17 @@ class FlightResource extends JsonResource
     {
         return [
             "id" => $this->id,
+            "name" => $this->name,
             "departure_date" => $this->departure_date,
             "estimated_arrival_date" => $this->estimated_arrival_date,
-            "passengers" => $this->passengers,
             "created_at" => $this->created_at,
-            "base_cost" => json_decode($this->base_cost, true),
+            "total_passenger" => count($this->whenLoaded('passengers')),
+            "base_cost" => $this->base_cost,
             'airplane' => $this->whenLoaded('airplane'),
             'departure_airport' => $this->whenLoaded('departureAirport'),
-            'arrival_airport' => $this->whenLoaded('arrivalAirport')
+            'arrival_airport' => $this->whenLoaded('arrivalAirport'),
+            "passengers" => $this->whenLoaded('passengers'),
+
         ];
     }
 }

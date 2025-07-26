@@ -11,6 +11,9 @@ class Flight extends Model
 
     protected  $guarded = [];
 
+    protected $casts = [
+        "base_cost" => "array",
+    ];
     public  function airplane()
     {
         return $this->belongsTo(Airplane::class);
@@ -24,6 +27,11 @@ class Flight extends Model
     public  function arrivalAirport()
     {
         return $this->belongsTo(Airport::class, "arrival_airport_id");
+    }
+
+    public  function passengers()
+    {
+        return $this->hasMany(Passenger::class, "flight_id");
     }
 
 }

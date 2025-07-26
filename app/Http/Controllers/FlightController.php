@@ -7,6 +7,7 @@ use App\Http\Resources\AirplaneResource;
 use App\Http\Resources\FlightResource;
 use App\Models\Flight;
 use App\Services\ApproachCost;
+use App\Services\CurrencyConverterService;
 use App\Services\EstimatedArrival;
 use App\Services\FlightFuelEstimationService;
 use App\Services\LandingCost;
@@ -18,12 +19,12 @@ class FlightController extends Controller
 
     public function index()
     {
-        $flights = Flight::with(["airplane", "arrivalAirport", "departureAirport"])
+        $flights = Flight::with(["airplane", "arrivalAirport", "departureAirport", "passengers"])
             ->orderBy("departure_date", "desc")
             ->get()->load(["airplane", "arrivalAirport", "departureAirport"]);
 
         return response()->json([
-            "flight" => FlightResource::collection($flights),
+            "flights" => FlightResource::collection($flights),
         ], 200);
     }
 
@@ -82,11 +83,11 @@ class FlightController extends Controller
                 )
             );
 
-            $flight->load(['airplane', 'departureAirport', 'arrivalAirport']);
+            $flight->load(["airplane", "departureAirport", "arrivalAirport", "passengers"]);
 
             return response()->json([
                 "message" => "Flight created",
-                "flight" => new AirplaneResource($flight),
+                "flight" => new FlightResource($flight),
             ], 201);
         } catch (\Exception $exception)
         {
@@ -109,9 +110,10 @@ class FlightController extends Controller
                 "message" => "Flight not found"
             ], 404);
         }
+        $flight->load(["airplane", "arrivalAirport", "departureAirport", "passengers"]);
 
         return response()->json([
-            "flight" => new AirplaneResource($flight)
+            "flight" => new FlightResource($flight)
         ], 200);
     }
 
@@ -131,9 +133,11 @@ class FlightController extends Controller
 
         $flight->update($request->validated());
 
+        $flight->load(["airplane", "arrivalAirport", "departureAirport", "passengers"]);
+
         return response()->json([
             "message" => "Flight updated successfully",
-            "flight" => new AirplaneResource($flight),
+            "flight" => new FlightResource($flight),
         ], 200);
     }
 
