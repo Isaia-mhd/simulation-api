@@ -70,4 +70,5 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 EXPOSE 8080
 
 # Command to run Nginx and PHP-FPM
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+#CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD php artisan serve --host=0.0.0.0 --port=8080
