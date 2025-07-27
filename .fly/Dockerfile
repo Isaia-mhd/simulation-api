@@ -6,8 +6,6 @@ LABEL fly_launch_runtime="laravel"
 
 WORKDIR /var/www/html
 
-# Install Composer and other PHP extensions needed by your Laravel app
-# Add any missing extensions if your app fails later
 # Install PHP extensions using apk
 RUN apk add --no-cache \
     php83-zip \
@@ -35,6 +33,10 @@ RUN apk add --no-cache \
 # Set up Node.js for frontend assets (if you use Vite/NPM/Yarn)
 ARG NODE_VERSION=18
 RUN apk add --no-cache nodejs npm
+
+# --- IMPORTANT: ADD THIS LINE TO INSTALL COMPOSER ---
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# ---------------------------------------------------
 
 COPY . .
 
