@@ -8,15 +8,29 @@ WORKDIR /var/www/html
 
 # Install Composer and other PHP extensions needed by your Laravel app
 # Add any missing extensions if your app fails later
-RUN install-php-extensions \
-    zip \
-    pdo_mysql \
-    bcmath \
-    gd \
-    exif \
-    mbstring \
-    pcntl \
-    intl
+# Install PHP extensions using apk
+RUN apk add --no-cache \
+    php83-zip \
+    php83-pdo_mysql \
+    php83-bcmath \
+    php83-gd \
+    php83-exif \
+    php83-mbstring \
+    php83-pcntl \
+    php83-intl \
+    # Add any other required extensions. Common ones:
+    php83-dom \
+    php83-xml \
+    php83-ctype \
+    php83-session \
+    php83-fileinfo \
+    php83-tokenizer \
+    php83-opcache \
+    php83-curl \
+    php83-openssl \
+    php83-json \
+    php83-xmlreader \
+    php83-phar
 
 # Set up Node.js for frontend assets (if you use Vite/NPM/Yarn)
 ARG NODE_VERSION=18
