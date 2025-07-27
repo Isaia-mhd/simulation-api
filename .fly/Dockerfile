@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.4
 ARG PHP_VERSION=8.4
-FROM flyio/php:${PHP_VERSION}-fpm-alpine # Use 8.4 as confirmed
+FROM flyio/php:8.4-fpm-alpine
 
 LABEL fly_launch_runtime="laravel"
 
