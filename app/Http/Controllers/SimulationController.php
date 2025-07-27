@@ -29,9 +29,37 @@ class SimulationController extends Controller
 
             $flightDataForStatistics = (new FlightResource($flight))->toArray(request());
 
+            $fuel = $flightDataForStatistics["base_cost"]["fuel"]["price"];
+            $landing = $flightDataForStatistics["base_cost"]["landing_cost"];
+            $lighting = $flightDataForStatistics["base_cost"]["lighting_cost"];
+            $approach = $flightDataForStatistics["base_cost"]["approach_cost"];
+
+            $cost =  $this->addCost($landing, $lighting, $approach, $fuel);
+
+            $passenger = $flightDataForStatistics["passenger"];
+
+            //EUR = 4500
+            $eur = 4500;
+            $benefit = ($passenger["revenue"] * $eur) - $cost;
+
+            $statistics = [
+                "fuel" => $fuel,
+                "landing" => $landing,
+                "lighting" => $lighting,
+                "approach" => $approach,
+                "ticket" => $passenger["revenue"] * $eur,
+                "total_cost" => $cost,
+                "benefit" => round($benefit, 2),
+                "passengers" => [
+                    "total_passenger" => $passenger["count"],
+                    "economy" => $passenger["economy"],
+                    "business" => $passenger["business"]
+                ]
+            ];
+
             $simulation = Simulation::create([
                 "flight_id" => $validated["flight_id"],
-                "statistics" => $flightDataForStatistics,
+                "statistics" => $statistics,
             ]);
 
             return response()->json([
@@ -44,5 +72,10 @@ class SimulationController extends Controller
         ]);
 
 
+    }
+
+    public function addCost($fuel, $landing, $lighting, $approach)
+    {
+        return $fuel + $landing + $lighting + $approach;
     }
 }
