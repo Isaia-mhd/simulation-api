@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string("gender")->default("male");
             $table->string("nationality");
             $table->timestamp("date_of_birth");
-            $table->string("class")->default("economic");
+            $table->string("class")->default("economy");
             $table->unsignedDecimal("ticket_price");
             $table->timestamps();
         });

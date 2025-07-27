@@ -21,7 +21,7 @@ class TicketImport implements ToModel, WithStartRow
         return new Ticket([
             'itineraire' => $itineraire,
             'business' => round($row[1]), // Round business price (J)
-            'economic' => round($row[2]), // Round economic price (Y)
+            'economy' => round($row[2]), // Round economic price (Y)
         ]);
     }
 }

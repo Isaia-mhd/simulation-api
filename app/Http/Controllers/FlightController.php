@@ -21,7 +21,7 @@ class FlightController extends Controller
     {
         $flights = Flight::with(["airplane", "arrivalAirport", "departureAirport", "passengers"])
             ->orderBy("departure_date", "desc")
-            ->get()->load(["airplane", "arrivalAirport", "departureAirport"]);
+            ->get();
 
         return response()->json([
             "flights" => FlightResource::collection($flights),
