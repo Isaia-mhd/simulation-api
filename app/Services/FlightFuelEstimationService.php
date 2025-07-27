@@ -17,8 +17,9 @@ class FlightFuelEstimationService
             throw new \Exception("Avion non trouvé.");
         }
 
+        $airport = Airport::where('id', $flightData['departure_airport_id'])->first();
+        $origin = $airport->code;
 
-        $origin = Airport::where('id', $flightData['departure_airport_id'])->value('code');
         $destination = Airport::where('id', $flightData['arrival_airport_id'])->value('code');
 
         if (!$origin || !$destination) {
@@ -40,7 +41,15 @@ class FlightFuelEstimationService
         $minutesFlight = \Carbon\Carbon::createFromFormat('H:i:s', $timeFlight)
             ->diffInMinutes(\Carbon\Carbon::createFromTime(0, 0, 0));
 
-        return ($airplane->fuel_consumption_lh * $minutesFlight) / 60;
+        $estimatedFuel_l = ($airplane->fuel_consumption_lh * $minutesFlight) / 60;
+        $fuelPrice = $estimatedFuel_l * $airport->fuel_price;
+
+        $fuel = [
+            "litre" => $estimatedFuel_l,
+            "price" => $fuelPrice,
+        ];
+
+        return $fuel;
     }
 
 }

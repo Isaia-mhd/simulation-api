@@ -23,7 +23,7 @@ class LightingCost
         $arrivalDateTime = $estimatedArrival->estimateTime($flight);
 
         $date = Carbon::parse($arrivalDateTime);
-        $timeOnly = $date->format('H:i'); // Résultat : "18:05"   2025-07-27 17:21:58
+        $timeOnly = $date->format('H:i');
 
         $month = $date->format('m');
         $day = $date->format('d');

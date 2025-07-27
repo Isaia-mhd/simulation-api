@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string("code");
             $table->boolean("has_lighting")->default(true);
-            $table->string("fuel_price")->nullable()->default(null);
+            $table->decimal("fuel_price")->nullable()->default(null);
             $table->string("unit")->default("MGA/L");
             $table->timestamps();
         });

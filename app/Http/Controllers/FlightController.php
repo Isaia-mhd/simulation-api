@@ -43,10 +43,10 @@ class FlightController extends Controller
         $approachCostValue = $approachCost->approachCost($data);
 
         $baseCost = json_encode([
-            "estimated_fuel" => $estimatedFuel,
-            "landing_cost" => $landingCostValue,
-            "lighting_cost" => $lightingCostValue,
-            "approach_cost" => $approachCostValue,
+            "fuel" => $estimatedFuel,
+            "landing_cost" => (float) $landingCostValue,
+            "lighting_cost" => (float) $lightingCostValue,
+            "approach_cost" => (float) $approachCostValue,
 
         ], JSON_PRETTY_PRINT);
 
