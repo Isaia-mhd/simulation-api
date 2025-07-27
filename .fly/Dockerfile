@@ -51,7 +51,8 @@ COPY . .
 
 # Install Composer dependencies
 # Ignoring platform requirement for ext-gd as it is installed via apk but Composer sometimes fails to detect it during build
-RUN composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-gd
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-gd --ignore-platform-req=ext-zip
+
 
 
 # Build frontend assets if package.json exists and build script is defined
