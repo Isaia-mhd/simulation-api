@@ -30,14 +30,14 @@ RUN apk add --no-cache \
     php83-xmlreader \
     php83-phar
 
-
-# Enable GD and other extensions for Composer CLI if needed
-# This might be redundant if php83-gd already correctly enables it, but good for troubleshooting
-RUN echo "extension=gd.so" > /etc/php83/conf.d/gd.ini \
-    && echo "extension=intl.so" > /etc/php83/conf.d/intl.ini \
-    && echo "extension=exif.so" > /etc/php83/conf.d/exif.ini
-# Add other extensions here if Composer complains about them too
-# Example: && echo "extension=mbstring.so" > /etc/php83/conf.d/mbstring.ini
+# Link PHP extensions to be available for CLI (Composer)
+# This step symlinks the .ini files from where apk puts them
+# to where the PHP CLI often looks for them.
+RUN ln -s /etc/php83/conf.d/gd.ini /usr/local/etc/php/conf.d/gd.ini \
+    && ln -s /etc/php83/conf.d/intl.ini /usr/local/etc/php/conf.d/intl.ini \
+    && ln -s /etc/php83/conf.d/exif.ini /usr/local/etc/php/conf.d/exif.ini
+    # Add any other extensions you added via apk add if composer complains about them
+    # e.g., && ln -s /etc/php83/conf.d/mbstring.ini /usr/local/etc/php/conf.d/mbstring.ini
 
 # Set up Node.js for frontend assets (if you use Vite/NPM/Yarn)
 ARG NODE_VERSION=18
