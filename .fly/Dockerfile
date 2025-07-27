@@ -73,4 +73,4 @@ EXPOSE 8080
 
 # Command to run Nginx and PHP-FPM
 #CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["/bin/sh", "-c", "/usr/local/sbin/php-fpm -t -y /usr/local/etc/php-fpm.conf -R && sleep infinity"]
