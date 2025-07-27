@@ -28,7 +28,8 @@ RUN apk add --no-cache \
     php83-openssl \
     php83-json \
     php83-xmlreader \
-    php83-phar
+    php83-phar \
+    supervisor
 
 # Link PHP extensions to be available for CLI (Composer)
 # This step symlinks the .ini files from where apk puts them
