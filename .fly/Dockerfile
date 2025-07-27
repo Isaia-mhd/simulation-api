@@ -47,6 +47,8 @@ RUN apk add --no-cache nodejs npm
 # --- IMPORTANT: ADD THIS LINE TO INSTALL COMPOSER ---
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # ---------------------------------------------------
+# Assuming supervisord.conf is in the .fly folder
+COPY .fly/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY . .
 
@@ -71,4 +73,4 @@ EXPOSE 8080
 
 # Command to run Nginx and PHP-FPM
 #CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
-CMD php artisan serve --host=0.0.0.0 --port=8080
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
