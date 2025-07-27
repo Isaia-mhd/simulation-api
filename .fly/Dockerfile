@@ -50,7 +50,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY . .
 
 # Install Composer dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Ignoring platform requirement for ext-gd as it is installed via apk but Composer sometimes fails to detect it during build
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-gd
+
 
 # Build frontend assets if package.json exists and build script is defined
 # Adjust 'npm run build' if your package.json uses a different script (e.g., 'vite build')
