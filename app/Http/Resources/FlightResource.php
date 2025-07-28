@@ -23,6 +23,7 @@ class FlightResource extends JsonResource
 
         $revenue = $economy->sum("ticket_price") + $business->sum("ticket_price");
 
+        $currency = config("services.exchanges.default_rate_mga_eur"); // EUR
 
         return [
             "id" => $this->id,
@@ -32,13 +33,15 @@ class FlightResource extends JsonResource
                 "count" => $passengers->count(),
                 "economy" => [
                     "total" => $economy->count(),
-                    "ticket_price" => $economy->value("ticket_price"),
-                    "total_price" => $economy->value("ticket_price") * $economy->count(),
+                    "ticket_price_eur" => (float) $economy->value("ticket_price"),
+                    "ticket_price" => $economy->value("ticket_price") * $currency,
+                    "total_price" => ($economy->value("ticket_price") * $currency) * $economy->count(),
                 ],
                 "business" => [
                     "total" => $business->count(),
-                    "ticket_price" => $business->value("ticket_price"),
-                    "total_price" => $business->value("ticket_price") * $business->count(),
+                    "ticket_price_eur" => (float) $business->value("ticket_price"),
+                    "ticket_price" => $business->value("ticket_price") * $currency,
+                    "total_price" => ($business->value("ticket_price") * $currency) * $business->count(),
                 ],
                 "revenue" => round($revenue, 2),
             ],

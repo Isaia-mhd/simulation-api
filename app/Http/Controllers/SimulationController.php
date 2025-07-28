@@ -33,24 +33,25 @@ class SimulationController extends Controller
         $lighting = $flightDataForStatistics["base_cost"]["lighting_cost"];
         $approach = $flightDataForStatistics["base_cost"]["approach_cost"];
 
+        $passenger = $flightDataForStatistics["passenger"];
+
+        //EUR
+        $currency = config("services.exchanges.default_rate_mga_eur");
+
+        $baseCost =  $this->addCost($landing, $lighting, $approach, $fuel);
+
         if (!$validated["escale"])
         {
 
-            $cost =  $this->addCost($landing, $lighting, $approach, $fuel);
-
-            $passenger = $flightDataForStatistics["passenger"];
-
-            //EUR = 4500
-            $eur = 4500;
-            $benefit = ($passenger["revenue"] * $eur) - $cost;
+            $benefit = ($passenger["revenue"] * $currency) - $baseCost;
 
             $statistics = [
                 "fuel" => $fuel,
                 "landing" => $landing,
                 "lighting" => $lighting,
                 "approach" => $approach,
-                "ticket" => $passenger["revenue"] * $eur,
-                "total_cost" => $cost,
+                "ticket" => $passenger["revenue"] * $currency,
+                "total_cost" => $baseCost,
                 "benefit" => round($benefit, 2),
                 "passengers" => [
                     "total_passenger" => $passenger["count"],
@@ -69,10 +70,33 @@ class SimulationController extends Controller
             ]);
         }
 
-        $escaleCost = $layoverService->layover($validated["escale"], $flight);
+        $escale = $layoverService->layover($validated["escale"], $flight);
+
+        $benefit = ($passenger["revenue"] * $currency) - ($baseCost + $escale["escale_cost"]);
+
+        $statistics = [
+            "fuel" => $fuel,
+            "landing" => $landing,
+            "lighting" => $lighting,
+            "approach" => $approach,
+            "ticket" => $passenger["revenue"] * $currency,
+            "escale" => $escale,
+            "total_cost" => $baseCost + $escale["escale_cost"],
+            "benefit" => round($benefit, 2),
+            "passengers" => [
+                "total_passenger" => $passenger["count"],
+                "economy" => $passenger["economy"],
+                "business" => $passenger["business"]
+            ]
+        ];
+
+        $simulation = Simulation::create([
+            "flight_id" => $validated["flight_id"],
+            "statistics" => $statistics,
+        ]);
 
         return response()->json([
-            "simulation" => $escaleCost,
+            "simulation" => $simulation,
         ]);
 
 

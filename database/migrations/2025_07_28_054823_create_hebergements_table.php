@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('hebergements', function (Blueprint $table) {
+            $table->id();
+            $table->string('escale', 10)->unique();
+            $table->integer('room_cost')->nullable();
+            $table->integer('breakfast_cost')->nullable();
+            $table->integer('lunch_cost')->nullable();
+            $table->integer('dinner_cost')->nullable();
+            $table->integer('go_transfer_cost')->nullable();
+            $table->integer('back_transfer_cost')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('hebergements');
+    }
+};

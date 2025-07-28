@@ -32,8 +32,8 @@ return [
     ],
     'exchanges' => [
         'api_key' => env('EXCHANGE_API_KEY'),
-        'base_currency' => 'USD',
-        'default_rate_mga_usd' => 4500,
+        'base_currency' => 'EUR',
+        'default_rate_mga_eur' => 4500,
     ]
 
 ];
