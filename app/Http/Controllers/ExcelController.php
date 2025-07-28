@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\ApproachImport;
+use App\Imports\ConvoyeurImport;
 use App\Imports\FuelPriceImport;
 use App\Imports\LandingImport;
 use App\Imports\LightingImport;
@@ -27,6 +28,7 @@ class ExcelController extends Controller
             'timeflight' => storage_path('app/private/timeflights.xlsx'),
             'ticket' => storage_path('app/private/ticketprice.xlsx'),
             'sunrise_sunset' => storage_path('app/private/csls.xlsx'),
+            'convoyeur' => storage_path('app/private/prixconvoyeur.xlsx'),
         ];
 
         // Check if all files exist
@@ -45,6 +47,7 @@ class ExcelController extends Controller
             Excel::import(new TimeflightImport(), $files['timeflight']);
             Excel::import(new TicketImport(), $files['ticket']);
             Excel::import(new SunriseSunsetImport(), $files['sunrise_sunset'], null, \Maatwebsite\Excel\Excel::XLSX, ['sheet' => 'CS-LS']);
+            Excel::import(new ConvoyeurImport(), $files['convoyeur']);
 
             // Update Approach records
             Approach::where('airplane_name', 'ATR72-500')

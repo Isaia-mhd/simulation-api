@@ -7,6 +7,7 @@ use App\Http\Resources\FlightResource;
 use App\Http\Resources\SimulationResource;
 use App\Models\Flight;
 use App\Models\Simulation;
+use App\Services\LayoverService;
 use Illuminate\Http\Request;
 
 class SimulationController extends Controller
@@ -18,21 +19,22 @@ class SimulationController extends Controller
             "simulations" => SimulationResource::collection($simulations)
         ]);
     }
-    public function store(SimulateRequest $request)
+    public function store(SimulateRequest $request, LayoverService $layoverService)
     {
         $validated = $request->validated();
 
+        $flight = Flight::with(["airplane", "departureAirport", "arrivalAirport", "passengers"])->find($validated["flight_id"]);
+
+
+        $flightDataForStatistics = (new FlightResource($flight))->toArray(request());
+
+        $fuel = $flightDataForStatistics["base_cost"]["fuel"]["price"];
+        $landing = $flightDataForStatistics["base_cost"]["landing_cost"];
+        $lighting = $flightDataForStatistics["base_cost"]["lighting_cost"];
+        $approach = $flightDataForStatistics["base_cost"]["approach_cost"];
+
         if (!$validated["escale"])
         {
-            $flight = Flight::with(["airplane", "departureAirport", "arrivalAirport", "passengers"])->find($validated["flight_id"]);
-
-
-            $flightDataForStatistics = (new FlightResource($flight))->toArray(request());
-
-            $fuel = $flightDataForStatistics["base_cost"]["fuel"]["price"];
-            $landing = $flightDataForStatistics["base_cost"]["landing_cost"];
-            $lighting = $flightDataForStatistics["base_cost"]["lighting_cost"];
-            $approach = $flightDataForStatistics["base_cost"]["approach_cost"];
 
             $cost =  $this->addCost($landing, $lighting, $approach, $fuel);
 
@@ -67,8 +69,10 @@ class SimulationController extends Controller
             ]);
         }
 
+        $escaleCost = $layoverService->layover($validated["escale"], $flight);
+
         return response()->json([
-            "simulation" => "avec escale",
+            "simulation" => $escaleCost,
         ]);
 
 
