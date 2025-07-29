@@ -22,9 +22,10 @@ class TimeflightImport implements ToCollection, WithMultipleSheets
         foreach ($rows as $index => $row) {
 //            $rowIndex = $index + 1;
 
-            if ((empty($row[0]) && empty($row[1])) ||
+            if ((empty($row[0]) && empty($row[1]) && empty($row[2])) ||
                 ($row[0] ?? '') === 'ITINERAIRE' ||
-                ($row[1] ?? '') === 'TEMPS DE VOL') {
+                ($row[1] ?? '') === 'TEMPS DE VOL' ||
+                ($row[2] ?? '') === 'NAME') {
                 continue;
             }
 
@@ -36,6 +37,7 @@ class TimeflightImport implements ToCollection, WithMultipleSheets
                 Timeflight::create([
                     'itineraire' => $row[0],
                     'timeflight' => gmdate('H:i:s', $minutes * 60),
+                    'flight_name' => $row[2],
                 ]);
             }
         }

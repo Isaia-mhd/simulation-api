@@ -27,6 +27,7 @@ class FlightResource extends JsonResource
 
         return [
             "id" => $this->id,
+            "name" => $this->name,
             "estimated_arrival_date" => $this->estimated_arrival_date,
             "created_at" => $this->created_at,
             "passenger" => [

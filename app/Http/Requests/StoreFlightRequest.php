@@ -22,7 +22,6 @@ class StoreFlightRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "required|string|max:50",
             "airplane_id" => "required|exists:airplanes,id",
             "departure_airport_id" => "required|exists:airports,id",
             "arrival_airport_id" => "required|exists:airports,id",

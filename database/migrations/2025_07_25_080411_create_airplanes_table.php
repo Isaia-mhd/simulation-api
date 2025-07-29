@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('airplanes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('real_name');
             $table->unsignedInteger("capacity")->nullable();
             $table->decimal("fuel_consumption_lh", 8, 2)->nullable()->default(0);
             $table->timestamps();

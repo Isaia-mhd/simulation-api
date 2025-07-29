@@ -17,6 +17,7 @@ class AirplaneResource extends JsonResource
         return [
             "id" => $this->id,
             "name" => $this->name,
+            "real_name" => $this->real_name,
             "fuel_consumption_lh" => $this->fuel_consumption_lh,
             "capacity" => $this->capacity
         ];

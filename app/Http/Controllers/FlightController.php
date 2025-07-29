@@ -77,7 +77,8 @@ class FlightController extends Controller
                 array_merge(
                     $validated,
                     [
-                        "estimated_arrival_date" => $estimatedArrival,
+                        "name" => $estimatedArrival["flight_name"],
+                        "estimated_arrival_date" => $estimatedArrival["time"],
                         "base_cost" => $baseCost,
                     ]
                 )

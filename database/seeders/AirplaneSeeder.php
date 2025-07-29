@@ -14,16 +14,24 @@ class AirplaneSeeder extends Seeder
      */
     public function run(): void
     {
-        Airplane::create([
-            "name" => "ATR72-500",
-            "capacity" => 500,
-            "fuel_consumption_lh" => 20.0,
-        ]);
+        $reals  = [
+          "5R-EJH", "5R-EJK", "5R-EJC", "5R-MJF"
+        ];
+        foreach ($reals as $real) {
+            Airplane::create([
+                "name" => "AT72-500",
+                "real_name" => $real,
+                "capacity" => 500,
+                "fuel_consumption_lh" => 645,
+            ]);
+        }
+
 
         Airplane::create([
-            "name" => "ATR72-600",
+            "name" => "AT72-600",
+            "real_name" => "5R-EJB",
             "capacity" => 460,
-            "fuel_consumption_lh" => 18.0,
+            "fuel_consumption_lh" => 610,
         ]);
     }
 }

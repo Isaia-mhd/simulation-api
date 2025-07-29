@@ -25,8 +25,9 @@ class EstimatedArrival
 
         list($h, $m, $s) = explode(':', $timeFlight);
 
-        $estimated_arrival = $departure->addHours($h)->addMinutes($m)->addSeconds($s);
-
-        return  $estimated_arrival->toDateTimeString();
+        return [
+            "time" => $departure->addHours($h)->addMinutes($m)->addSeconds($s)->toDateTimeString(),
+            "flight_name" => $itineraire->flight_name
+        ];
     }
 }
