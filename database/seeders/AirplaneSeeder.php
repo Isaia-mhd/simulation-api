@@ -19,7 +19,7 @@ class AirplaneSeeder extends Seeder
         ];
         foreach ($reals as $real) {
             Airplane::create([
-                "name" => "AT72-500",
+                "name" => "ATR72-500",
                 "real_name" => $real,
                 "capacity" => 500,
                 "fuel_consumption_lh" => 645,
@@ -28,7 +28,7 @@ class AirplaneSeeder extends Seeder
 
 
         Airplane::create([
-            "name" => "AT72-600",
+            "name" => "ATR72-600",
             "real_name" => "5R-EJB",
             "capacity" => 460,
             "fuel_consumption_lh" => 610,

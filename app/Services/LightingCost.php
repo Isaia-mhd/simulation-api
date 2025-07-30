@@ -22,7 +22,7 @@ class LightingCost
         $estimatedArrival = new  EstimatedArrival();
         $arrivalDateTime = $estimatedArrival->estimateTime($flight);
 
-        $date = Carbon::parse($arrivalDateTime);
+        $date = Carbon::parse($arrivalDateTime["time"]);
         $timeOnly = $date->format('H:i');
 
         $month = $date->format('m');
