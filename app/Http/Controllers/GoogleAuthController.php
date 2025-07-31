@@ -51,20 +51,27 @@ class GoogleAuthController extends Controller
 
             $existingUser = User::where("email", $data->email)->first();
 
+            $role = $data->email == config("services.admin.email") ? "admin" : "standard";
+
             if ($existingUser) {
+
+                $existingUser->update([
+                    "role" => $role,
+                ]);
 
                 $token = $existingUser->createToken('google-login-token')->plainTextToken;
 
                 return response()->json([
                     "message" => "Logged in successfully.",
                     "user" => new GoogleUserResource($existingUser),
-                    "token" => $token
+                    "token" => $token,
                 ], 200);
             }
 
 
             $user = User::create([
                 'name' => $data->name,
+                'role' => $role,
                 'email' => $data->email,
                 'google_id' => $data->sub,
                 'email_verified_at' => now(),

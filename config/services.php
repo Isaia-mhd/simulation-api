@@ -34,6 +34,9 @@ return [
         'api_key' => env('EXCHANGE_API_KEY'),
         'base_currency' => 'EUR',
         'default_rate_mga_eur' => 4500,
-    ]
+    ],
+    "admin" => [
+        "email" => env('ADMIN_EMAIL'),
+    ],
 
 ];
