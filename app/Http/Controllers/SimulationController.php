@@ -106,4 +106,44 @@ class SimulationController extends Controller
     {
         return $fuel + $landing + $lighting + $approach;
     }
+
+    public function show($simulation)
+    {
+        $simulation = Simulation::find($simulation);
+
+        if(!$simulation)
+        {
+            return response()->json([
+                "message" => "Simulation not found"
+            ], 404);
+        }
+
+        $simulation->load("flight");
+        return response()->json([
+            "simulations" => new SimulationResource($simulation)
+        ]);
+    }
+
+    public function update($simulation)
+    {
+        return response()->json([
+            "message" => "Simulation is cannot be changed"
+        ], 422);
+    }
+
+    public function delete($simulation)
+    {
+        $simulation = Simulation::find($simulation);
+        if(!$simulation)
+        {
+            return response()->json([
+                "message" => "Simulation not found"
+            ], 404);
+        }
+        $simulation->delete();
+
+        return response()->json([
+            "message" => "Simulation deleted successfully"
+        ]);
+    }
 }
