@@ -15,7 +15,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post("logout", [GoogleAuthController::class, 'logoutGoogleUser']);
     Route::apiResource("airports", AirportController::class);
 });
-Route::post("/auth/google", [GoogleAuthController::class, "loginGoogleUser"]);
+Route::post("/auth/google", [GoogleAuthController::class, "loginGoogleUser"])->middleware('coop');
 
 
 
