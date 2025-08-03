@@ -44,9 +44,9 @@ class FlightController extends Controller
 
         $baseCost = [
             "fuel" => $estimatedFuel,
-            "landing_cost" => (float) $landingCostValue,
-            "lighting_cost" => (float) $lightingCostValue,
-            "approach_cost" => (float) $approachCostValue,
+            "landing_cost" => $landingCostValue,
+            "lighting_cost" => $lightingCostValue,
+            "approach_cost" => $approachCostValue,
 
         ];
 

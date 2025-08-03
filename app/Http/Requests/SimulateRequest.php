@@ -22,8 +22,7 @@ class SimulateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "flight_id" => "required|exists:flights,id",
-            "escale" => "nullable|string|max:3",
+            "simulations" => "array",
         ];
     }
 }

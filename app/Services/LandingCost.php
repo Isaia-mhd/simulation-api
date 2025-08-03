@@ -8,13 +8,13 @@ use App\Models\Landing;
 
 class LandingCost
 {
-    public function landingCost(array $cost)
+    public function landingCost($flight): float
     {
         //get the which airplane is the flight
-        $airplane = Airplane::find($cost["airplane_id"]);
+        $airplane = Airplane::find($flight["airplane_id"]);
 
         //and what is the airport destination
-        $airportCode = Airport::where("id", $cost["arrival_airport_id"])->value("code");
+        $airportCode = Airport::where("id", $flight["arrival_airport_id"])->value("code");
 
         //fetch it and return its total
         $landing = Landing::where("airplane_name", $airplane->name)

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class LightingCost
 {
-    public function lightingCost(array $flight)
+    public function lightingCost($flight): float
     {
         //get the which airplane is the flight
         $airplane = Airplane::find($flight["airplane_id"]);
@@ -45,7 +45,7 @@ class LightingCost
 
         //fetch it and return its total
         $lighting = Lighting::where("airplane_name", $airplane->name)
-            ->where("airport_code", $airportCode)->firstOrFail();
+            ->where("airport_code", $airportCode)->first();
 
         return $lighting->total_lighting;
 

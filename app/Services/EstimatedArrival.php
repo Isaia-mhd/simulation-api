@@ -9,25 +9,23 @@ use Carbon\Carbon;
 
 class EstimatedArrival
 {
-    public  function estimateTime(array $flightData)
+    public  function estimateTime($flight)
     {
-        $origin = Airport::where('id', $flightData['departure_airport_id'])->value('code');
+        $origin = Airport::where('id', $flight["departure_airport_id"])->value('code');
 
-        $destination = Airport::where('id', $flightData['arrival_airport_id'])->value('code');
+        $destination = Airport::where('id', $flight["arrival_airport_id"])->value('code');
 
-        $itineraire = Timeflight::where("itineraire", $origin . "-" . $destination)
-            ->orWhere("itineraire", $destination . "-" .$origin )
-            ->first();
+        $itineraire = Timeflight::where("itineraire", $origin . "-" . $destination)->first();
 
         $timeFlight = $itineraire->timeflight;
 
-        $departure = Carbon::parse($flightData['departure_date']);
+        $departure = Carbon::parse($flight["departure_date"]);
 
         list($h, $m, $s) = explode(':', $timeFlight);
 
         return [
             "time" => $departure->addHours($h)->addMinutes($m)->addSeconds($s)->toDateTimeString(),
-            "flight_name" => $itineraire->flight_name
+            "flight_name" => $itineraire->flight_name,
         ];
     }
 }

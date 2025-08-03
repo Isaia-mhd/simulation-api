@@ -9,21 +9,22 @@ use App\Models\Timeflight;
 
 class FlightFuelEstimationService
 {
-    public function estimate(array $flightData)
+    public function estimate($flight): array
     {
 
-        $airplane = Airplane::find($flightData['airplane_id']);
+        $airplane = Airplane::find($flight["airplane_id"]);
+
         if (!$airplane) {
-            throw new \Exception("Avion non trouvé.");
+            throw new \Exception("Airplane not found");
         }
 
-        $airport = Airport::where('id', $flightData['departure_airport_id'])->first();
+        $airport = Airport::where('id', $flight["departure_airport_id"])->first();
         $origin = $airport->code;
 
-        $destination = Airport::where('id', $flightData['arrival_airport_id'])->value('code');
+        $destination = Airport::where('id', $flight["arrival_airport_id"])->value('code');
 
         if (!$origin || !$destination) {
-            throw new \Exception("Code de l'aéroport invalide.");
+            throw new \Exception("Iata code invalid");
         }
 
 
@@ -32,7 +33,7 @@ class FlightFuelEstimationService
             ->first();
 
         if (!$itineraire) {
-            throw new \Exception("Itinéraire non trouvé pour $origin - $destination.");
+            throw new \Exception("Itinerary not found for $origin - $destination.");
         }
 
 
@@ -44,12 +45,12 @@ class FlightFuelEstimationService
         $estimatedFuel_l = ($airplane->fuel_consumption_lh * $minutesFlight) / 60;
         $fuelPrice = $estimatedFuel_l * $airport->fuel_price;
 
-        $fuel = [
-            "litre" => $estimatedFuel_l,
-            "price" => $fuelPrice,
-        ];
 
-        return $fuel;
+
+        return [
+            "litre" => round($estimatedFuel_l, 2),
+            "price" =>  round($fuelPrice, 2),
+        ];
     }
 
 }
