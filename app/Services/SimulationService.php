@@ -8,6 +8,7 @@ use App\Http\Resources\PassengerCostResource;
 use App\Models\Airport;
 use App\Models\Convoyeur;
 use App\Models\Flight;
+use Illuminate\Support\Facades\Log;
 
 class SimulationService
 {
@@ -43,14 +44,13 @@ class SimulationService
             $hebergement = 0;
 
 
-            if($round["go"]["escale"])
+            if($round["go"]["escale"] == true)
             {
                 $hebergement = $resultsGo["hebergement"]["hebergement"]["total_cost"];
-
                 //no fuel for back
                 $fuelTotal = $resultsGo["baseCost"]["fuel"]["price"];
-
             }
+
 
 
             $totalCost = (new SimulationController())->addCost($fuelTotal, $landingTotal, $lightingTotal, $approachTotal, $convoyeurTotal, $hebergement);

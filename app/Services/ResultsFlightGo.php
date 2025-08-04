@@ -60,7 +60,7 @@ class ResultsFlightGo
                 }
 
 
-                $hebergement = (new LayoverService)->layover(strtoupper($simulate["airportEscaleId"]), $flight);
+                $hebergement = (new LayoverService)->layover($flight);
 
 
             }

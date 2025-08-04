@@ -23,22 +23,30 @@ class SimulationController extends Controller
     }
     public function store(SimulateRequest $request, SimulationService $simulationService)
     {
-        $validated = $request->validated();
+        try {
+            $validated = $request->validated();
 
-        $results = $simulationService->filter($validated);
+            $results = $simulationService->filter($validated);
 
-        usort($results, function ($a, $b) {
-            return $b['estimatedBenefit'] <=> $a['estimatedBenefit'];
-        });
+            usort($results, function ($a, $b) {
+                return $b['estimatedBenefit'] <=> $a['estimatedBenefit'];
+            });
 
-        Simulation::create([
-            "statistics" => $results,
-        ]);
+            Simulation::create([
+                "statistics" => $results,
+            ]);
 
-        return response()->json([
-            "message" => "Simulation done successfully",
-            "statistics" => $results,
-        ]);
+            return response()->json([
+                "message" => "Simulation done successfully",
+                "statistics" => $results,
+            ]);
+
+        } catch (\Exception $e){
+            return response()->json([
+                "message" => "Simulation failed",
+                "error" => $e->getMessage()
+            ], 400);
+        }
 
 
     }
