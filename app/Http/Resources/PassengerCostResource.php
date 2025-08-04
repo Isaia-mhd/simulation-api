@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Controllers\CurrencyController;
+use App\Services\CurrencyConverterService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,14 +21,14 @@ class PassengerCostResource extends JsonResource
         $economy = $passengers->where('class', 'economy');
         $business = $passengers->where('class', 'business');
 
-        $baseCost = $this->base_cost ?? [];
+        $currencyService = app(CurrencyConverterService::class);
+        $currency = $currencyService->getRate();
 
-        $currency = config("services.exchanges.default_rate_mga_eur"); // EUR
-
-        $revenue = ($economy->sum("ticket_price") + $business->sum("ticket_price")) * $currency;
+        $revenue = ($economy->sum("ticket_price") + $business->sum("ticket_price"));
 
         return array(
             "passenger" => array(
+                "rate" => $currency,
                 "count" => $passengers->count(),
                 "economy" => array(
                     "total" => $economy->count(),
@@ -42,7 +44,8 @@ class PassengerCostResource extends JsonResource
                     "total_ticket_price_eur" => (float) $business->value("ticket_price") * $business->count(),
                     "total_price" => ($business->value("ticket_price") * $currency) * $business->count(),
                 ),
-                "revenue" => round($revenue, 2) ,
+                "revenue" => round($revenue, 2) * $currency,
+                "revenue_eur" => round($revenue, 2)
             ),
         );
     }

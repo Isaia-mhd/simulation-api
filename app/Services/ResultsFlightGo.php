@@ -104,7 +104,7 @@ class ResultsFlightGo
 
             }
 
-            $hebergement = (new LayoverService)->layover(strtoupper($flight->arrivalAirport->code), $flight);
+            $hebergement = (new LayoverService)->layover($flight);
 
 
         }

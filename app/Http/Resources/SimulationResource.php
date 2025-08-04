@@ -16,11 +16,9 @@ class SimulationResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'flight_id' => $this->flight_id,
             'statistics' => $this->statistics,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'flight' => $this->whenLoaded('flight')
         ];
     }
 }

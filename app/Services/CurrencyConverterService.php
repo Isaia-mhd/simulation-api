@@ -8,19 +8,14 @@ use Illuminate\Support\Facades\Http;
 
 class CurrencyConverterService
 {
-    public function convertToMGA(float $amountUSD): float
+    public function getRate(): float
     {
-
-        $rate = ExchangeRate::where('from_currency', 'USD')
+        $manual = ExchangeRate::where('from_currency', 'EUR')
             ->where('to_currency', 'MGA')
-            ->value('rate');
+            ->latest()
+            ->first();
 
-
-        if (!$rate) {
-            $rate = config('services.exchanges.default_rate_mga_usd', 4500);
-        }
-
-        return round($amountUSD * $rate, 2);
+        return $manual->rate ?? config('services.exchanges.default_rate_mga_eur');
     }
 
 }

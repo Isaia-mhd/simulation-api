@@ -20,7 +20,7 @@ class SimulationService
             $flightGo = Flight::with(["passengers", "departureAirport", "arrivalAirport"])
                         ->find($round["go"]["flightId"]);
 
-            $flightBack = Flight::with(["passengers"])
+            $flightBack = Flight::with(["passengers", "departureAirport", "arrivalAirport"])
                         ->where("departure_airport_id", $flightGo->arrival_airport_id)
                         ->where("arrival_airport_id", $flightGo->departure_airport_id)
                         ->first();
@@ -46,6 +46,7 @@ class SimulationService
             if($round["go"]["escale"])
             {
                 $hebergement = $resultsGo["hebergement"]["hebergement"]["total_cost"];
+
                 //no fuel for back
                 $fuelTotal = $resultsGo["baseCost"]["fuel"]["price"];
 
@@ -56,19 +57,31 @@ class SimulationService
             $passengerGo = (new PassengerCostResource($flightGo))->toArray(request());
             $passengerBack = (new PassengerCostResource($flightBack))->toArray(request());
             $revenue = $passengerGo['passenger']['revenue'] + $passengerBack['passenger']['revenue'];
-
+            $revenue_eur = $passengerGo['passenger']['revenue_eur'] + $passengerBack['passenger']['revenue_eur'];
 
 
             $total = [
-                "flight" => $flightGo->name . " - " . $flightBack->name,
+                "flight" => [
+                    "go" => [
+                        "name" => $flightGo->name,
+                        "departure" => $flightGo->departureAirport->name,
+                        "arrival" => $flightGo->arrivalAirport->name,
+                    ],
+                    "back" => [
+                        "name" => $flightBack->name,
+                        "departure" => $flightBack->departureAirport->name,
+                        "arrival" => $flightBack->arrivalAirport->name,
+                    ]
+                ],
                 "fuel" => $fuelTotal,
                 "landing" => $landingTotal,
                 "lighting" => $lightingTotal,
                 "approach" => $approachTotal,
                 "convoyeur" => $convoyeurTotal,
-                "hebergement" => $hebergement ? $hebergement : 0,
+                "hebergement" => $hebergement ?? 0,
                 "totalCost" => $totalCost,
                 "revenue" => $revenue,
+                "revenue_eur" => $revenue_eur,
                 "estimatedBenefit" => $revenue - $totalCost,
                 "passengers" => [
                     "go" => $passengerGo,

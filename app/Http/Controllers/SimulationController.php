@@ -10,6 +10,7 @@ use App\Models\Simulation;
 use App\Services\LayoverService;
 use App\Services\SimulationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SimulationController extends Controller
 {
@@ -20,11 +21,15 @@ class SimulationController extends Controller
             "simulations" => SimulationResource::collection($simulations)
         ]);
     }
-    public function store(SimulateRequest $request, LayoverService $layoverService, SimulationService $simulationService)
+    public function store(SimulateRequest $request, SimulationService $simulationService)
     {
         $validated = $request->validated();
 
         $results = $simulationService->filter($validated);
+
+        usort($results, function ($a, $b) {
+            return $b['estimatedBenefit'] <=> $a['estimatedBenefit'];
+        });
 
         Simulation::create([
             "statistics" => $results,
@@ -67,7 +72,7 @@ class SimulationController extends Controller
         ], 422);
     }
 
-    public function delete($simulation)
+    public function destroy($simulation)
     {
         $simulation = Simulation::find($simulation);
         if(!$simulation)
@@ -80,6 +85,32 @@ class SimulationController extends Controller
 
         return response()->json([
             "message" => "Simulation deleted successfully"
+        ]);
+    }
+
+    public function destroyAll()
+    {
+        if(Gate::denies('isAdmin'))
+        {
+            return response()->json([
+                "message" => "Access denied"
+            ]);
+        }
+
+        $simulations = Simulation::all();
+
+        if (count($simulations) > 0) {
+            foreach($simulations as $simulation)
+            {
+                $simulation->delete();
+            }
+            return response()->json([
+                "message" => "All Simulations deleted successfully"
+            ]);
+        }
+
+        return response()->json([
+            "message" => "No Simulations Found"
         ]);
     }
 }

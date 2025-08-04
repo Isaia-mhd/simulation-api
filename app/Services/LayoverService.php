@@ -10,11 +10,12 @@ use App\Models\Hebergement;
 
 class LayoverService
 {
-    public function layover($airportEscaledId, $flight)
+    public function layover($flight): array
     {
         $flightDataForStatistics = (new FlightResource($flight))->toArray(request());
 
-        $iataCode = Airport::where("id", $airportEscaledId)->first()->code;
+        $airport = Airport::find($flight->arrival_airport_id);
+        $iataCode = $airport->code;
 
 
         $totalPassenger = $flightDataForStatistics["passenger"]["count"];
