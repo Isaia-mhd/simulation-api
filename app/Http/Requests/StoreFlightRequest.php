@@ -27,6 +27,8 @@ class StoreFlightRequest extends FormRequest
             "arrival_airport_id" => "required|exists:airports,id",
             "departure_date" => "required|date",
             "status" => "required|string",
+            "economy" => "required|integer",
+            "business" => "required|integer",
         ];
     }
 }

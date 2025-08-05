@@ -8,14 +8,16 @@ use App\Models\Ticket;
 
 class TicketPriceService
 {
-    public function getTicketPrice($passenger)
+    public function getTicketPrice($passenger, $flight)
     {
-        $flight = Flight::find($passenger["flight_id"]);
+        $itineraire1 = $flight->departureAirport->code . "-" . $flight->arrivalAirport->code;
+        $itineraire2 = $flight->arrivalAirport->code . "-" . $flight->departureAirport->code;
 
-        $price = Ticket::where("itineraire", $flight->departureAirport->code . "-" . $flight->arrivalAirport->code)
-                        ->orWhere("itineraire", $flight->arrivalAirport->code . "-" . $flight->departureAirport->code)
-                        ->value(strtolower($passenger["class"]));
+        $price = Ticket::where("itineraire", $itineraire1)
+            ->orWhere("itineraire", $itineraire2)
+            ->value(strtolower($passenger["class"]));
 
         return $price;
     }
 }
+

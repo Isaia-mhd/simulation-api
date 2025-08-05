@@ -36,7 +36,7 @@ return [
         'default_rate_mga_eur' => 4500,
     ],
     "admin" => [
-        "email" => env('ADMIN_EMAIL'),
+        "emails" => explode(',', env('ADMIN_EMAIL', '')),
     ],
 
 ];

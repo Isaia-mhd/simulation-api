@@ -51,7 +51,8 @@ class GoogleAuthController extends Controller
 
             $existingUser = User::where("email", $data->email)->first();
 
-            $role = $data->email == config("services.admin.email") ? "admin" : "standard";
+            $adminEmails = config('services.admin.emails');
+            $role = in_array($data->email, $adminEmails) ? 'admin' : 'standard';
 
             if ($existingUser) {
 
